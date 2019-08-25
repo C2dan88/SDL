@@ -16,15 +16,10 @@ void InitTextureCache() {
 }
 
 void PushTextureCache(SDL_Texture *newTexture) {
-    TextureCache *current = textureCache;
-    while (current->next != NULL) {
-        current = current->next;
-    }
-
-    /* now we can add a new variable */
-    current->next = malloc(sizeof(struct TextureCache));
-    current->next->texture = newTexture;
-    current->next->next = NULL;
+    struct TextureCache* newTextureCache = malloc(sizeof(struct TextureCache));
+  	newTextureCache->texture = newTexture;
+  	newTextureCache->next = textureCache;
+  	textureCache = newTextureCache;
 }
 
 int getCount(struct TextureCache *head) 
@@ -42,18 +37,15 @@ int getTextureAllocationInBytets()
     return getCount(textureCache) * sizeof(struct TextureCache);
 }
 
-void DestroryTextureCache()//TextureCache **cache)
+void DestroryTextureCache()
 {
-    struct TextureCache *current = textureCache;
-    struct TextureCache *next;
-
-    int i = 0;
-    while (current != NULL) {
-        next = current->next;
-        SDL_DestroyTexture(current->texture);
-        free(current);
-        current = next;
-        i++;
+    struct TextureCache *prev = textureCache;
+    while (textureCache)
+    {
+        textureCache = textureCache->next;
+        SDL_DestroyTexture(prev->texture);
+ 	      free(prev);
+ 	      prev = textureCache;
     }
 }
 

@@ -14,6 +14,6 @@ typedef struct TextureCache {
 
 void InitTextureCache();
 void PushTextureCache(SDL_Texture *newTexture);
-void DestroryTextureCache(/*struct TextureCache **cache*/);
+void DestroryTextureCache();
 
 #endif
