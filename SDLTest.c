@@ -56,7 +56,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    TTF_Font *font = TTF_OpenFont(TTF_FONT_PATH("arial.ttf"), 15);
+    TTF_Font *font = LoadFont("arial.ttf", 15);
+    if(font == NULL)
+    {
+        printf("Unable to load font! SDL Error: %s\n", SDL_GetError());
+        return 1;
+    }
 
     bool isRunning = true;
     SDL_Event event;

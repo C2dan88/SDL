@@ -8,8 +8,6 @@
 global_variable int SCREEN_WIDTH = 800;
 global_variable int SCREEN_HEIGHT = 600;
 
-#define TTF_FONT_PATH(file) "C:\\Windows\\Fonts\\"file
-
 typedef struct oscVal {
     int value;
     int min;
