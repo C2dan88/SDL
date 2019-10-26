@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-    const int FPS = 144;
+    const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
     Uint32 frameStart;
@@ -29,20 +29,20 @@ int main(int argc, char *argv[])
     //     return 0;
     // }
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
     }
 
-    window = SDL_CreateWindow("SDL Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE|SDL_WINDOW_OPENGL);
-    if(window < 0)
+    window = SDL_CreateWindow("SDL Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+    if (window < 0)
     {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         return 0;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
-    if(renderer < 0)
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer < 0)
     {
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_Delay(2000);
@@ -50,14 +50,14 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    if(TTF_Init() < 0)
+    if (TTF_Init() < 0)
     {
         SDL_Log("Unable to initialize SDL TTF: %s", SDL_GetError());
         return 1;
     }
 
     TTF_Font *font = LoadFont("arial.ttf", 15);
-    if(font == NULL)
+    if (font == NULL)
     {
         printf("Unable to load font! SDL Error: %s\n", SDL_GetError());
         return 1;
@@ -82,19 +82,17 @@ int main(int argc, char *argv[])
     oscVal alphaObj = (oscVal){
         .value = 255,
         .step = -1,
-        .lastTickCount = 0
-    };
+        .lastTickCount = 0};
 
     oscVal textYPos = (oscVal){
         .value = 255,
         .step = -5,
-        .lastTickCount = 0
-    };
+        .lastTickCount = 0};
 
     fpsinit();
-            char randText[100];
-        rand_string(randText, 100);
-    while(isRunning)
+    char randText[100];
+    rand_string(randText, 100);
+    while (isRunning)
     {
         frameStart = SDL_GetTicks();
 
@@ -103,35 +101,35 @@ int main(int argc, char *argv[])
         SDL_RenderClear(renderer);
 
         // handle events
-        while(SDL_PollEvent(&event))
+        while (SDL_PollEvent(&event))
         {
-            switch(event.type)
+            switch (event.type)
             {
-                case SDL_QUIT:
-                    isRunning = false;
-                break;
-                
-                case SDL_KEYDOWN:
-                    KEYS[event.key.keysym.scancode] = true;
+            case SDL_QUIT:
+                isRunning = false;
                 break;
 
-                case SDL_KEYUP:
-                    KEYS[event.key.keysym.scancode] = false;
-                break;
-                
-                case SDL_MOUSEMOTION:
-                    SDL_GetMouseState(&mouse.x, &mouse.y);
+            case SDL_KEYDOWN:
+                KEYS[event.key.keysym.scancode] = true;
                 break;
 
-                case SDL_WINDOWEVENT:
-                    switch(event.window.event)
-                    {
-                        case SDL_WINDOWEVENT_RESIZED:
-                            //SDL_Log("Old Window size %dx%d\n", SCREEN_WIDTH, SCREEN_HEIGHT);
-                            SDL_GetWindowSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
-                            //SDL_Log("New Window size: %dx%d\n", SCREEN_WIDTH, SCREEN_HEIGHT);
-                        break;
-                    }
+            case SDL_KEYUP:
+                KEYS[event.key.keysym.scancode] = false;
+                break;
+
+            case SDL_MOUSEMOTION:
+                SDL_GetMouseState(&mouse.x, &mouse.y);
+                break;
+
+            case SDL_WINDOWEVENT:
+                switch (event.window.event)
+                {
+                case SDL_WINDOWEVENT_RESIZED:
+                    //SDL_Log("Old Window size %dx%d\n", SCREEN_WIDTH, SCREEN_HEIGHT);
+                    SDL_GetWindowSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
+                    //SDL_Log("New Window size: %dx%d\n", SCREEN_WIDTH, SCREEN_HEIGHT);
+                    break;
+                }
                 break;
             }
         }
@@ -140,7 +138,7 @@ int main(int argc, char *argv[])
         clamp(&player.x, 0, SCREEN_WIDTH - player.w);
         clamp(&player.y, 0, SCREEN_HEIGHT - player.h);
 
-        if(KEYS[SDL_SCANCODE_R])
+        if (KEYS[SDL_SCANCODE_R])
             playerColor = RandomColor();
 
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -188,9 +186,8 @@ int main(int argc, char *argv[])
         SDL_RenderPresent(renderer);
         DestroryTextureCache();
 
-
         frameTime = SDL_GetTicks() - frameStart;
-        if(frameDelay > frameTime)
+        if (frameDelay > frameTime)
         {
             SDL_Delay(frameDelay - frameTime);
             //SDL_Log("Delay : %d\n", frameDelay - frameTime);
@@ -207,4 +204,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
